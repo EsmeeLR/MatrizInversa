@@ -45,25 +45,59 @@ public class MatrizInversa {
         return identidad;
     }
 
-    // Método para imprimir la matriz
+    // Método para imprimir la matriz como enteros
     public static void imprimirMatriz(double[][] matriz) {
         for (double[] fila : matriz) {
             for (double valor : fila) {
-                System.out.printf("%.2f ", valor);
+                System.out.print((int) valor + " ");
             }
             System.out.println();
         }
     }
 
-    // Guardar matriz en archivo
+    // Guardar matriz en archivo como enteros
     public static void guardarEnArchivo(double[][] matriz, String nombreArchivo) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo));
         for (double[] fila : matriz) {
             for (double valor : fila) {
-                bw.write(String.format("%.2f ", valor));
+                bw.write((int) valor + " ");
             }
             bw.newLine();
         }
         bw.close();
+    }
+
+    // Programa principal para probar
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Ingrese el tamaño de la matriz cuadrada (n x n):");
+        int n = sc.nextInt();
+        double[][] matriz = new double[n][n];
+
+        System.out.println("Ingrese los elementos de la matriz:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matriz[i][j] = sc.nextDouble();
+            }
+        }
+
+        System.out.println("Matriz original:");
+        imprimirMatriz(matriz);
+
+        try {
+            double[][] inversa = inversa(matriz);
+
+            System.out.println("Matriz inversa:");
+            imprimirMatriz(inversa);
+
+            // Guardar en archivo
+            guardarEnArchivo(inversa, "salida.txt");
+            System.out.println("La matriz inversa se guardó en salida.txt");
+        } catch (ArithmeticException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        sc.close(); // cerrar Scanner
     }
 }
